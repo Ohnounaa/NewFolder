@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather For An American In Paris</string>
+    <string-array name="temperature_units_array">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+    </string-array>
+</resources>
