@@ -18,7 +18,7 @@ class WeatherDataRepository private constructor(context: Context){
 
     private val weatherDao = database.dailyWeatherDao()
 
-    fun getAllWeatherInfo(): LiveData<List<DailyWeatherInfo>> = weatherDao.getAllWeatherInfo();
+    fun getAllWeatherInfo():  LiveData<MutableList<DailyWeatherInfo>> = weatherDao.getAllWeatherInfo();
     fun getSingleDayWeatherInfo(id: UUID):LiveData<DailyWeatherInfo> = weatherDao.getSingleDayWeatherInfo(id);
 
     companion object{

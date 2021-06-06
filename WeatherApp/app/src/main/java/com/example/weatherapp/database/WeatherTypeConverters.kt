@@ -4,24 +4,57 @@ import androidx.room.TypeConverter
 import com.example.weatherapp.DataModels.FeelsLike
 import com.example.weatherapp.DataModels.Temp
 import com.example.weatherapp.DataModels.WeatherResponse
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import java.lang.StringBuilder
 import java.util.*
 
 
 class WeatherTypeConverters {
 
     @TypeConverter
-    fun fromFeelsLikeToString(feelsLike: FeelsLike): String =  Gson().toJson(feelsLike);
+    fun fromFeelsLikeToString(feelsLike: FeelsLike): String {
+        var sb = StringBuilder()
+        sb.append(feelsLike.day.toString() + ",")
+        sb.append(feelsLike.eve.toString()  + ",")
+        sb.append(feelsLike.morn.toString() + ",")
+        sb.append(feelsLike.night.toString() + ",")
+        return sb.toString()
+    }
 
     @TypeConverter
-    fun fromStringtoFeelsLike(feelsLikeString:String): FeelsLike = Gson().fromJson(feelsLikeString, FeelsLike::class)
+    fun fromStringtoFeelsLike(feelsLikeString: String): FeelsLike? {
+        var arrayList = feelsLikeString.split(",", ignoreCase = true, limit = 0)
+        return FeelsLike(
+            arrayList[0].toDouble(),
+            arrayList[1].toDouble(),
+            arrayList[2].toDouble(),
+            arrayList[3].toDouble()
+        );
+    }
 
     @TypeConverter
-    fun fromTempToString(temp: Temp): String = Gson().toJson(temp);
+    fun fromTempToString(temp: Temp): String {
+        var sb = StringBuilder()
+        sb.append(temp.day.toString() + ",")
+        sb.append(temp.eve.toString()  + ",")
+        sb.append(temp.max.toString() + ",")
+        sb.append(temp.max.toString() + ",")
+        sb.append(temp.morn.toString() + ",")
+        sb.append(temp.night.toString() + ",")
+        return sb.toString()
+    }
 
     @TypeConverter
-    fun fromStringToTemp(tempAsString: String): Temp = Gson().fromJson(tempAsString, Temp::class)
+    fun fromStringToTemp(tempAsString: String): Temp? {
+        var arrayList = tempAsString.split(",", ignoreCase = true, limit = 0)
+        return Temp(
+            arrayList[0].toDouble(),
+            arrayList[1].toDouble(),
+            arrayList[2].toDouble(),
+            arrayList[3].toDouble(),
+            arrayList[4].toDouble(),
+            arrayList[5].toDouble()
+        );
+    }
 
     @TypeConverter
     fun fromUUID(uuid: UUID): String? {
@@ -30,17 +63,24 @@ class WeatherTypeConverters {
 
     @TypeConverter
     fun fromWeatherResponseToString(weatherResponse: kotlin.collections.MutableList<WeatherResponse>): String {
-        val gson: Gson = Gson()
-        val type: Type = object : TypeTokentlin.collections.MutableList<WeatherResponse>() {}.type
-        return gson.toJson(weatherResponse, type)
+        var sb = StringBuilder()
+        //only ever 1 entry in list
+        val relevantResponse:WeatherResponse = weatherResponse.first()
+        sb.append(relevantResponse.description + ", ")
+        sb.append(relevantResponse.icon + ", ")
+        sb.append(relevantResponse.id.toString() + ", ")
+        sb.append(relevantResponse.main + ", ")
+        return sb.toString()
     }
 
     @TypeConverter
-    fun fromStringToWeatherResponseList(weatherResponseAsString: String): MutableList<WeatherResponse> {
-        val gson: Gson = Gson()
-        val type: Type =
-            object : TypeToken<kotlin.collections.MutableList<WeatherResponse?>?>() {}.getType()
-        return gson.fromJson(json, type)
+    fun fromStringToWeatherResponseList(weatherResponseAsString: String): MutableList<WeatherResponse?> {
+        var arrayList = weatherResponseAsString.split(",", ignoreCase = true, limit = 0)
+        val w: WeatherResponse = WeatherResponse(arrayList[0], arrayList[1], arrayList[2].toInt(), arrayList[3])
+        var list:MutableList<WeatherResponse?> = mutableListOf()
+         list.add(w)
+        return list;
+
     }
 
     @TypeConverter
