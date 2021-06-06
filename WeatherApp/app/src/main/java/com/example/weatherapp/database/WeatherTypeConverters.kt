@@ -12,7 +12,7 @@ class WeatherTypeConverters {
 
     @TypeConverter
     fun fromFeelsLikeToString(feelsLike: FeelsLike): String {
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         sb.append(feelsLike.day.toString() + ",")
         sb.append(feelsLike.eve.toString()  + ",")
         sb.append(feelsLike.morn.toString() + ",")
@@ -22,7 +22,7 @@ class WeatherTypeConverters {
 
     @TypeConverter
     fun fromStringtoFeelsLike(feelsLikeString: String): FeelsLike? {
-        var arrayList = feelsLikeString.split(",", ignoreCase = true, limit = 0)
+        val arrayList = feelsLikeString.split(",", ignoreCase = true, limit = 0)
         return FeelsLike(
             arrayList[0].toDouble(),
             arrayList[1].toDouble(),
@@ -33,7 +33,7 @@ class WeatherTypeConverters {
 
     @TypeConverter
     fun fromTempToString(temp: Temp): String {
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         sb.append(temp.day.toString() + ",")
         sb.append(temp.eve.toString()  + ",")
         sb.append(temp.max.toString() + ",")
@@ -57,34 +57,34 @@ class WeatherTypeConverters {
     }
 
     @TypeConverter
-    fun fromUUID(uuid: UUID): String? {
+    fun fromUUIDToString(uuid: UUID): String? {
         return uuid?.toString()
     }
 
     @TypeConverter
     fun fromWeatherResponseToString(weatherResponse: kotlin.collections.MutableList<WeatherResponse>): String {
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         //only ever 1 entry in list
-        val relevantResponse:WeatherResponse = weatherResponse.first()
-        sb.append(relevantResponse.description + ", ")
-        sb.append(relevantResponse.icon + ", ")
-        sb.append(relevantResponse.id.toString() + ", ")
-        sb.append(relevantResponse.main + ", ")
+        val relevantResponse:WeatherResponse? = weatherResponse.first()
+        sb.append(relevantResponse?.description + ", ")
+        sb.append(relevantResponse?.icon + ", ")
+        sb.append(relevantResponse?.id.toString() + ", ")
+        sb.append(relevantResponse?.main + ", ")
         return sb.toString()
     }
 
     @TypeConverter
     fun fromStringToWeatherResponseList(weatherResponseAsString: String): MutableList<WeatherResponse?> {
-        var arrayList = weatherResponseAsString.split(",", ignoreCase = true, limit = 0)
-        val w: WeatherResponse = WeatherResponse(arrayList[0], arrayList[1], arrayList[2].toInt(), arrayList[3])
-        var list:MutableList<WeatherResponse?> = mutableListOf()
+        val arrayList = weatherResponseAsString.split(",", ignoreCase = true, limit = 0)
+        val w = WeatherResponse(arrayList[0], arrayList[1], arrayList[2].toInt(), arrayList[3])
+        val list:MutableList<WeatherResponse?> = mutableListOf()
          list.add(w)
         return list;
 
     }
 
     @TypeConverter
-    fun toUUID(uuid: String): UUID? {
+    fun fromStringToUUID(uuid: String): UUID? {
         return UUID.fromString(uuid)
     }
 }
