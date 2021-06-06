@@ -8,12 +8,33 @@ import java.util.*
 
 class WeatherTypeConverters {
 
-@TypeConverter
-    fun fromTemperature(temp: Temp): String {
-       return temp.toString()
+    @TypeConverter
+    fun fromFeelsLike(feelsLike: FeelsLike): String {
+
+    }
+    @TypeConverter
+    fun toFeelsLike() {
+
     }
 
-    fun toTemperature() {
+    @TypeConverter
+    fun fromTemp(temp: Temp): String {
+        val sb: StringBuilder = StringBuilder()
+        sb.append(temp.day.toString() + ",")
+        sb.append(temp.min.toString() + ",")
+        sb.append(temp.max.toString()+ ",")
+        sb.append(temp.night.toString()+ ",")
+        sb.append(temp.eve.toString()+ ",")
+        sb.append(temp.morn.toString()+ ",")
+        return sb.toString()
+    }
+
+
+    @TypeConverter
+    fun toTemp(temp: String):Temp? {
+       val arr: Array<String> = temp.split(',')
+        var temp: Temp? = null
+
 
     }
 
