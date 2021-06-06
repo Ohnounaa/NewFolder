@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 
-data class WeatherResponse(val id: UUID = UUID.randomUUID(),
+data class WeatherResponse(
                            val description: String,
                            val icon: String,
                            val id: Int,

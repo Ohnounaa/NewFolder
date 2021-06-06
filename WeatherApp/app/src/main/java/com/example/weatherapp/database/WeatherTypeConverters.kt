@@ -3,44 +3,44 @@ package com.example.weatherapp.database
 import androidx.room.TypeConverter
 import com.example.weatherapp.DataModels.FeelsLike
 import com.example.weatherapp.DataModels.Temp
-import java.lang.StringBuilder
+import com.example.weatherapp.DataModels.WeatherResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.*
+
 
 class WeatherTypeConverters {
 
     @TypeConverter
-    fun fromFeelsLike(feelsLike: FeelsLike): String {
-
-    }
-    @TypeConverter
-    fun toFeelsLike() {
-
-    }
+    fun fromFeelsLikeToString(feelsLike: FeelsLike): String =  Gson().toJson(feelsLike);
 
     @TypeConverter
-    fun fromTemp(temp: Temp): String {
-        val sb: StringBuilder = StringBuilder()
-        sb.append(temp.day.toString() + ",")
-        sb.append(temp.min.toString() + ",")
-        sb.append(temp.max.toString()+ ",")
-        sb.append(temp.night.toString()+ ",")
-        sb.append(temp.eve.toString()+ ",")
-        sb.append(temp.morn.toString()+ ",")
-        return sb.toString()
-    }
-
+    fun fromStringtoFeelsLike(feelsLikeString:String): FeelsLike = Gson().fromJson(feelsLikeString, FeelsLike::class)
 
     @TypeConverter
-    fun toTemp(temp: String):Temp? {
-       val arr: Array<String> = temp.split(',')
-        var temp: Temp? = null
+    fun fromTempToString(temp: Temp): String = Gson().toJson(temp);
 
-
-    }
+    @TypeConverter
+    fun fromStringToTemp(tempAsString: String): Temp = Gson().fromJson(tempAsString, Temp::class)
 
     @TypeConverter
     fun fromUUID(uuid: UUID): String? {
         return uuid?.toString()
+    }
+
+    @TypeConverter
+    fun fromWeatherResponseToString(weatherResponse: kotlin.collections.MutableList<WeatherResponse>): String {
+        val gson: Gson = Gson()
+        val type: Type = object : TypeTokentlin.collections.MutableList<WeatherResponse>() {}.type
+        return gson.toJson(weatherResponse, type)
+    }
+
+    @TypeConverter
+    fun fromStringToWeatherResponseList(weatherResponseAsString: String): MutableList<WeatherResponse> {
+        val gson: Gson = Gson()
+        val type: Type =
+            object : TypeToken<kotlin.collections.MutableList<WeatherResponse?>?>() {}.getType()
+        return gson.fromJson(json, type)
     }
 
     @TypeConverter
