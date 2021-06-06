@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 import java.util.*
 
 class DailyWeatherViewHolder(itemView: View,
-                             private val context: Context,
+                             private val context: Context?,
 ) : RecyclerView.ViewHolder(itemView) {
 
     private var date: TextView? = null

@@ -8,8 +8,7 @@ import com.example.weatherapp.DataModels.DailyWeatherInfo
 
 class DailyWeatherRecyclerViewAdapter(
     val weatherLiveData: List<DailyWeatherInfo>,
-    private val context: Context,
-    private val clickListener:itemClickCallback
+    private val context: Context?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -26,7 +25,7 @@ class DailyWeatherRecyclerViewAdapter(
                 holder.setAverageNightTemperature(weatherLiveData[position].temp.night)
                 holder.setRealFeelTemp(weatherLiveData[position].feels_like.day)
                 holder.setSkyDescription(weatherLiveData[position].weather[0].icon)
-                holder.onClick(clickListener, position)
+                //holder.onClick(clickListener, position)
             }
         }
     }
