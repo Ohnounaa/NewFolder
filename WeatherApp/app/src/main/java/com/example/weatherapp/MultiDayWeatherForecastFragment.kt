@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,13 +17,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.fragment.app.Fragment
+import java.util.*
 
-class MultiDayWeatherForecastFragment: Fragment(),AdapterView.OnItemSelectedListener {
+class MultiDayWeatherForecastFragment: Fragment(),
+    AdapterView.OnItemSelectedListener {
+
+    interface Callbacks{
+        fun onDaySelected(weatherdt:Int?) {}
+    }
+
+    private var callbacks: Callbacks? = null
 
     lateinit var recyclerView: RecyclerView
 
     private val weatherDataViewModel:WeatherDataViewModel by lazy {
         ViewModelProvider(this).get(WeatherDataViewModel::class.java)
+    }
+
+    override fun onAttach(context:Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
     }
 
     override fun onCreateView(
@@ -32,19 +51,25 @@ class MultiDayWeatherForecastFragment: Fragment(),AdapterView.OnItemSelectedList
     ): View? {
         
         val v = inflater.inflate(R.layout.multi_day_weather, container, false)
-        weatherDataViewModel.weatherLiveData.observe(
-            viewLifecycleOwner,
-            { weatherInfo ->
-                recyclerView.adapter =
-                    DailyWeatherRecyclerViewAdapter(weatherInfo, context)
-            },
-        )
+
         recyclerView = v.findViewById(R.id.daily_weather_data_collection)
         recyclerView.layoutManager = LinearLayoutManager(context)
        // setUnitSelectorMenu()
 
         return v
     }
+
+    override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        weatherDataViewModel.weatherLiveData.observe(
+            viewLifecycleOwner,
+            { weatherInfo ->
+                recyclerView.adapter =
+                    DailyWeatherRecyclerViewAdapter(weatherInfo, context, callbacks)
+            },
+        )
+    }
+
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         if (recyclerView.adapter != null

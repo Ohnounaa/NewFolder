@@ -9,12 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.io.Serializable
-import java.util.*
 
 class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
 
     lateinit var vm: ViewModel
+    lateinit var d: DailyWeatherInfo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,13 +32,16 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
         super.onDetach()
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        d = DailyWeatherInfo()
+        val dt = arguments?.getSerializable("DATE") as Int
+        vm.getDaysWeather(dt);
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val index = arguments?.get("INDEX")
-            //(vm as WeatherDataViewModel).weatherLiveData(index)
-        //(vm as WeatherDataViewModel)
-        (vm as WeatherDataViewModel).weatherLiveData
-
     }
 
     private fun addWeatherDataToBottomSheet() {
@@ -47,15 +49,15 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(day: DailyWeatherInfo): WeatherDetailViewBottomSheetFragment {
-            var map: HashMap<String, String> = HashMap<String, String>()
-            var v: WeatherDetailViewBottomSheetFragment = WeatherDetailViewBottomSheetFragment()
-            var b: Bundle = Bundle()
-            b.putSerializable("INDEX", map)
-            v.arguments = b
-            return v
-        }
+        fun newInstance(day: Int?): WeatherDetailViewBottomSheetFragment {
+           val args = Bundle().apply {
+               putSerializable("DATE", day)
+           }
 
+            return WeatherDetailViewBottomSheetFragment().apply{
+                arguments = args
+            }
+        }
     }
 
 

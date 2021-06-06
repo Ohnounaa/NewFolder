@@ -6,28 +6,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 
+
 class DailyWeatherRecyclerViewAdapter(
     val weatherLiveData: List<DailyWeatherInfo>,
-    private val context: Context?
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val context: Context?,
+    val callbacks: MultiDayWeatherForecastFragment.Callbacks?
+) : RecyclerView.Adapter<DailyWeatherViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):DailyWeatherViewHolder {
         val layoutInflater:LayoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.daily_weather_data_viewholder, parent, false)
-        return DailyWeatherViewHolder(view, context)
+        return DailyWeatherViewHolder(view, context, callbacks)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
-            is DailyWeatherViewHolder-> {
-                holder.setDate(weatherLiveData[position].dt)
-                holder.setAverageDayTemperature(weatherLiveData[position].temp.day)
-                holder.setAverageNightTemperature(weatherLiveData[position].temp.night)
-                holder.setRealFeelTemp(weatherLiveData[position].feels_like.day)
-                holder.setSkyDescription(weatherLiveData[position].weather[0].icon)
-                //holder.onClick(clickListener, position)
-            }
-        }
+    override fun onBindViewHolder(holder: DailyWeatherViewHolder, position: Int) {
+        val weatherDay = weatherLiveData[position]
+        holder.bindData(weatherDay)
     }
 
     override fun getItemCount(): Int {

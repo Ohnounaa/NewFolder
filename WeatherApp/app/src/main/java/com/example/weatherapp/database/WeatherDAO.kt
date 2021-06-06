@@ -11,6 +11,6 @@ interface WeatherDao{
     @Query("SELECT * FROM DailyWeatherInfo")
     fun getAllWeatherInfo(): LiveData<MutableList<DailyWeatherInfo>>
 
-    @Query("SELECT * FROM DailyWeatherInfo WHERE id=(:id)")
-    fun getSingleDayWeatherInfo(id:UUID): LiveData<DailyWeatherInfo>
+    @Query("SELECT * FROM DailyWeatherInfo WHERE dt=(:dt)")
+    fun getSingleDayWeatherInfo(dt:Int): LiveData<DailyWeatherInfo>
 }
