@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.squareup.picasso.Picasso
 import java.util.*
+import java.text.*;
 
 class DailyWeatherViewHolder(itemView: View,
                              private val context: Context?,
@@ -30,7 +31,7 @@ class DailyWeatherViewHolder(itemView: View,
         maxDailyTempTextView = itemView.findViewById(R.id.avg_day_temp)
         nightTempTextView = itemView.findViewById(R.id.avg_night_temp)
         realFeelTempTextView = itemView.findViewById(R.id.real_feel_temperature)
-        skyDescriptionView = itemView.findViewById(R.id.sky_description)
+        skyDescriptionView = itemView.findViewById(R.id.sky_description_text)
         this.cb = callback
     }
 
@@ -46,8 +47,11 @@ class DailyWeatherViewHolder(itemView: View,
     }
 
    private fun setDate(unixDate: Int) {
-        val calendarDate = Date(unixDate.toLong() * 1000)
-        date?.text = calendarDate.toString()
+        val calendarDate:Date = Date(unixDate.toLong() * 1000)
+        val dateFormatter: SimpleDateFormat = SimpleDateFormat("EEEE, MMMM d, yyyy")
+        val d = dateFormatter.format(calendarDate)
+
+       date?.text = d.toString()
     }
 
    private fun setAverageDayTemperature(dayTemp: Double) {
@@ -59,7 +63,7 @@ class DailyWeatherViewHolder(itemView: View,
     }
 
     private fun setRealFeelTemp(realFeelTemp: Double) {
-        realFeelTempTextView?.text = "Real Feel: "+ realFeelTemp.toString()+"°"
+        realFeelTempTextView?.text = "Feels Like: "+ realFeelTemp.toString()+"°"
     }
 
     private fun setSkyDescription(skyDescriptionIcon: String) {
