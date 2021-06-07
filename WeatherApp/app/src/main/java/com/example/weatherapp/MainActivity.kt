@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(),
     supportFragmentManager.let{
         WeatherDetailViewBottomSheetFragment.newInstance(dayId).apply {
             show(it, "ALIZA")
-        }
+            }
         }
     }
 }

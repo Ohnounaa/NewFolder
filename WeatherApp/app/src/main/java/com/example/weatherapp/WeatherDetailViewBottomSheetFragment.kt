@@ -65,11 +65,11 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
 
     private fun setDataToDetailView(weatherDayInfo: DailyWeatherInfo) {
         timeCheck()
+            addImage(weatherDayInfo)
             addTopTemp(weatherDayInfo)
             addDescription(weatherDayInfo)
-            addDayAndEveningTemps(weatherDayInfo)
             addRealFeelTemp(weatherDayInfo)
-            addImage(weatherDayInfo)
+            addDayAndEveningTemps(weatherDayInfo)
             addMinAndMaxTemp(weatherDayInfo)
             addHumidity(weatherDayInfo)
             addPressure(weatherDayInfo)
@@ -79,18 +79,16 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
             if(weatherDayInfo.temp.day>25) {
                 isHot = true
             }
-            //addWarningText(isHot)
+            addWarningText(isHot)
         }
 
     }
 
     private fun addMinAndMaxTemp(weatherDayInfo: DailyWeatherInfo) {
         val dayTemp = fragmentLayout.findViewById<TextView>(R.id.max_temp)
-        //dayTemp.setTextColor(resources.getColor(R.color.yellow, null))
         dayTemp.text = "Max Temp: "+ (weatherDayInfo.temp.max).toString()
 
         val nightTemp = fragmentLayout.findViewById<TextView>(R.id.min_temp)
-        //nightTemp.setTextColor(resources.getColor(R.color.colorPrimaryDark, null))
         nightTemp.text = "Min Temp:"+ (weatherDayInfo.temp.min.toString())
     }
 
@@ -107,16 +105,15 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
     }
 
     private fun addHumidity(weatherDayInfo: DailyWeatherInfo) {
-        val nightTemp = fragmentLayout.findViewById<TextView>(R.id.min_temp)
+        val nightTemp = fragmentLayout.findViewById<TextView>(R.id.humidity)
         nightTemp.text = "Humidity (%) :"+ (weatherDayInfo.humidity.toString())
     }
 
     private fun addPressure(weatherDayInfo: DailyWeatherInfo) {
-        val dayTemp = fragmentLayout.findViewById<TextView>(R.id.max_temp)
+        val dayTemp = fragmentLayout.findViewById<TextView>(R.id.pressure)
         dayTemp.text = "Pressure (at Sea Leve, hPa): "+ (weatherDayInfo.pressure).toString()
 
     }
-
 
     private fun addDayAndEveningTemps(weatherDayInfo: DailyWeatherInfo) {
         val dayTemp = fragmentLayout.findViewById<TextView>(R.id.day_temp)

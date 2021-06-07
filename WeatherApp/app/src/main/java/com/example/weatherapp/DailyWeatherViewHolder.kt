@@ -4,6 +4,7 @@ package com.example.weatherapp
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.DataModels.DailyWeatherInfo
@@ -14,7 +15,7 @@ import java.text.*;
 class DailyWeatherViewHolder(itemView: View,
                              private val context: Context?,
                              callback: MultiDayWeatherForecastFragment.Callbacks?
-) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+) : RecyclerView.ViewHolder(itemView) {
 
     lateinit var weatherDay: DailyWeatherInfo
     private var date: TextView? = null
@@ -22,6 +23,7 @@ class DailyWeatherViewHolder(itemView: View,
     private var nightTempTextView: TextView? = null
     private var realFeelTempTextView: TextView? = null
     private var skyDescriptionView: ImageView? = null
+    private var button: Button =itemView.findViewById(R.id.more_button)
     private val picassoBuilder = Picasso.Builder(context)
     private val picassoInstance = picassoBuilder.build()
     private var cb: MultiDayWeatherForecastFragment.Callbacks? = null
@@ -33,16 +35,19 @@ class DailyWeatherViewHolder(itemView: View,
         realFeelTempTextView = itemView.findViewById(R.id.real_feel_temperature)
         skyDescriptionView = itemView.findViewById(R.id.sky_description_text)
         this.cb = callback
+        button.setOnClickListener{
+            cb?.onDaySelected(weatherDay.dt)
+        }
     }
 
     fun bindData(dwi: DailyWeatherInfo) {
         weatherDay = dwi
         setDate(dwi.dt)
-        setAverageDayTemperature(dwi.temp.day)
-        setAverageNightTemperature(dwi.temp.night)
-        setRealFeelTemp(dwi.feels_like.day)
+        setMinTemp(dwi.temp.min)
+        setMaxTemp(dwi.temp.max)
+        setAvgDayTemp(dwi.temp.day)
         setSkyDescription(dwi.weather[0].icon)
-        itemView.setOnClickListener(this)
+
 
     }
 
@@ -54,16 +59,16 @@ class DailyWeatherViewHolder(itemView: View,
        date?.text = d.toString()
     }
 
-   private fun setAverageDayTemperature(dayTemp: Double) {
-        maxDailyTempTextView?.text = "Day: "+ dayTemp.toString()+"°"
+   private fun setMinTemp(minTemp: Double) {
+        maxDailyTempTextView?.text = "Min Temp: "+ minTemp.toString()+"°"
     }
 
-   private fun setAverageNightTemperature(nightTemp: Double) {
-        nightTempTextView?.text = "Night: " + nightTemp.toString()+"°"
+   private fun setMaxTemp(maxTemp: Double) {
+        nightTempTextView?.text = "Max: " + maxTemp.toString()+"°"
     }
 
-    private fun setRealFeelTemp(realFeelTemp: Double) {
-        realFeelTempTextView?.text = "Feels Like: "+ realFeelTemp.toString()+"°"
+    private fun setAvgDayTemp(avgTemp: Double) {
+        realFeelTempTextView?.text =  avgTemp.toString()+"°"
     }
 
     private fun setSkyDescription(skyDescriptionIcon: String) {
@@ -74,10 +79,4 @@ class DailyWeatherViewHolder(itemView: View,
             .centerCrop()
             .into(skyDescriptionView)
     }
-
-
-    override fun onClick(v: View) {
-        cb?.onDaySelected(weatherDay.dt)
-    }
-
 }

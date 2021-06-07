@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@id/date"
         app:layout_constraintLeft_toRightOf="@id/sky_description_text"
         android:textStyle="bold"
-        android:textSize="18sp"/>
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/avg_day_temp"
@@ -65,5 +65,19 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"/>
+
+    <Button
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:text="+"
+        android:layout_marginTop="3dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:id="@+id/more_button"
+        android:background="@drawable/ripple"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
