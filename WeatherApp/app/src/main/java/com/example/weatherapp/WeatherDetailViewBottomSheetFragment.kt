@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,6 +50,13 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
                 for(day in weatherDaysInfo) {
                     if(day.dt == dateId)
                     setDataToDetailView(day)
+
+                    (dialog as? BottomSheetDialog)?.behavior?.apply {
+                        setFitToContents(false)
+                       // setPeekHeight(500)
+                       // isScrollControlled = true
+                       // state = BottomSheetBehavior.STATE_COLLAPSED
+                    }
                 }
             },
 
@@ -61,16 +70,30 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
             addDayAndEveningTemps(weatherDayInfo)
             addRealFeelTemp(weatherDayInfo)
             addImage(weatherDayInfo)
+            addMinAndMaxTemp(weatherDayInfo)
+            addHumidity(weatherDayInfo)
+            addPressure(weatherDayInfo)
 
             if(weatherDayInfo.temp.day>25 || weatherDayInfo.temp.day < 10) {
                 var isHot = false
             if(weatherDayInfo.temp.day>25) {
                 isHot = true
             }
-            addWarningText(isHot)
+            //addWarningText(isHot)
         }
 
     }
+
+    private fun addMinAndMaxTemp(weatherDayInfo: DailyWeatherInfo) {
+        val dayTemp = fragmentLayout.findViewById<TextView>(R.id.max_temp)
+        //dayTemp.setTextColor(resources.getColor(R.color.yellow, null))
+        dayTemp.text = "Max Temp: "+ (weatherDayInfo.temp.max).toString()
+
+        val nightTemp = fragmentLayout.findViewById<TextView>(R.id.min_temp)
+        //nightTemp.setTextColor(resources.getColor(R.color.colorPrimaryDark, null))
+        nightTemp.text = "Min Temp:"+ (weatherDayInfo.temp.min.toString())
+    }
+
 
     private fun timeCheck() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
@@ -81,6 +104,17 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
     private fun addTopTemp(weatherDayInfo: DailyWeatherInfo) {
         val topTemp = fragmentLayout.findViewById<TextView>(R.id.current_temp)
         topTemp?.text = weatherDayInfo.temp.day.toString() + "°"
+    }
+
+    private fun addHumidity(weatherDayInfo: DailyWeatherInfo) {
+        val nightTemp = fragmentLayout.findViewById<TextView>(R.id.min_temp)
+        nightTemp.text = "Humidity (%) :"+ (weatherDayInfo.humidity.toString())
+    }
+
+    private fun addPressure(weatherDayInfo: DailyWeatherInfo) {
+        val dayTemp = fragmentLayout.findViewById<TextView>(R.id.max_temp)
+        dayTemp.text = "Pressure (at Sea Leve, hPa): "+ (weatherDayInfo.pressure).toString()
+
     }
 
 
