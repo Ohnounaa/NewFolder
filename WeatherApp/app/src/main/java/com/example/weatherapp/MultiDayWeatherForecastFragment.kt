@@ -17,14 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
 import java.util.*
 
 class MultiDayWeatherForecastFragment: Fragment(),
     AdapterView.OnItemSelectedListener {
 
     interface Callbacks{
-        fun onDaySelected(weatherdt:Int?) {}
+        fun onDaySelected(weatherDt:Int?)
     }
+
 
     private var callbacks: Callbacks? = null
 
@@ -64,8 +66,7 @@ class MultiDayWeatherForecastFragment: Fragment(),
         weatherDataViewModel.weatherLiveData.observe(
             viewLifecycleOwner,
             { weatherInfo ->
-                recyclerView.adapter =
-                    DailyWeatherRecyclerViewAdapter(weatherInfo, context, callbacks)
+                recyclerView.adapter = DailyWeatherRecyclerViewAdapter(weatherInfo, context, callbacks)
             },
         )
     }
