@@ -13,7 +13,7 @@ class DailyWeatherRecyclerViewAdapter(
     val callbacks: MultiDayWeatherForecastFragment.Callbacks?
 ) : RecyclerView.Adapter<DailyWeatherViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):DailyWeatherViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyWeatherViewHolder {
         val layoutInflater:LayoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.daily_weather_data_viewholder, parent, false)
         return DailyWeatherViewHolder(view, context, callbacks)
