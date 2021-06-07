@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
         android:textSize="20sp"/>
 
     <ImageView
-        android:id="@+id/sky_description"
+        android:id="@+id/sky_description_text"
         android:layout_width="wrap_content"
         android:paddingEnd="5dp"
         android:paddingStart="5dp"
@@ -34,7 +35,7 @@
         android:padding="10dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/date"
-        app:layout_constraintLeft_toRightOf="@id/sky_description"
+        app:layout_constraintLeft_toRightOf="@id/sky_description_text"
         android:textStyle="bold"
         android:textSize="18sp"/>
 
@@ -42,7 +43,7 @@
         android:id="@+id/avg_day_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/sky_description"
+        app:layout_constraintLeft_toRightOf="@id/sky_description_text"
         app:layout_constraintTop_toBottomOf="@id/real_feel_temperature"
         android:textStyle="bold"
         android:textSize="18sp"/>
