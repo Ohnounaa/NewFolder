@@ -36,7 +36,7 @@ class MultiDayWeatherForecastFragment: Fragment(),
     lateinit var recyclerView: RecyclerView
 
     private val weatherDataViewModel:WeatherDataViewModel by lazy {
-        ViewModelProvider(this).get(WeatherDataViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(WeatherDataViewModel::class.java)
     }
 
     override fun onAttach(context:Context) {
@@ -87,19 +87,21 @@ class MultiDayWeatherForecastFragment: Fragment(),
                 && p1 != null) && touched
         ) {
             touched = false
-            for (weather in (recyclerView.adapter as DailyWeatherRecyclerViewAdapter).weatherLiveData) {
-                if ((p1 as TextView).text == "Fahrenheit") {
-                    weather.temp.day = convertCelsiusToFahrenheit(weather.temp.day)
-                    weather.temp.night = convertCelsiusToFahrenheit(weather.temp.night)
-                    weather.temp.max = convertCelsiusToFahrenheit(weather.temp.max)
-                    weather.temp.min = convertCelsiusToFahrenheit(weather.temp.min)
-                    weather.feels_like.day = convertCelsiusToFahrenheit(weather.feels_like.day)
-                } else if (p1.text == "Celsius") {
-                    weather.temp.day = convertFahrenheitToCelsius(weather.temp.day)
-                    weather.temp.night = convertFahrenheitToCelsius(weather.temp.night)
-                    weather.temp.max = convertFahrenheitToCelsius(weather.temp.max)
-                    weather.temp.min = convertFahrenheitToCelsius(weather.temp.min)
-                    weather.feels_like.day = convertFahrenheitToCelsius(weather.feels_like.day)
+            if ((p1 as TextView).text == "Fahrenheit") {
+                weatherDataViewModel.weatherLiveData.value!!.forEach { it ->
+                    it?.temp?.day = convertCelsiusToFahrenheit(it.temp.day)
+                    it?.temp?.night = convertCelsiusToFahrenheit(it.temp.night)
+                    it?.temp?.max = convertCelsiusToFahrenheit(it.temp.max)
+                    it?.temp?.min = convertCelsiusToFahrenheit(it.temp.min)
+                    it?.feels_like.day = convertCelsiusToFahrenheit(it.feels_like.day)
+                }
+            } else {
+                weatherDataViewModel.weatherLiveData.value!!.forEach {
+                    it?.temp?.day = convertFahrenheitToCelsius(it.temp.day)
+                    it?.temp?.night = convertFahrenheitToCelsius(it.temp.night)
+                    it?.temp?.max = convertFahrenheitToCelsius(it.temp.max)
+                    it?.temp?.min = convertFahrenheitToCelsius(it.temp.min)
+                    it?.feels_like.day = convertFahrenheitToCelsius(it.feels_like.day)
                 }
             }
             recyclerView.adapter?.notifyItemRangeChanged(

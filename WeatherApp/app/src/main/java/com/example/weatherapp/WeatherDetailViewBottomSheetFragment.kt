@@ -19,8 +19,8 @@ import java.util.*
 class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
 
     lateinit var fragmentLayout: View
-    private val weatherDayViewModel: WeatherDataViewModel by lazy {
-        ViewModelProvider(this).get(WeatherDataViewModel::class.java)
+    private val weatherDataViewModel: WeatherDataViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(WeatherDataViewModel::class.java)
     }
 
 
@@ -29,7 +29,23 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?):View?{
         fragmentLayout = layoutInflater.inflate(R.layout.daily_weather_detail, container, false)
-    return fragmentLayout
+
+        weatherDataViewModel.weatherLiveData.observe(
+            viewLifecycleOwner,
+            { weatherDaysInfo ->
+                val dateId: Int = arguments?.getSerializable("DATE") as Int
+                for(day in weatherDaysInfo) {
+                    if(day.dt == dateId)
+                        setDataToDetailView(day)
+                    (dialog as? BottomSheetDialog)?.behavior?.apply {
+                        setFitToContents(false)
+                    }
+                }
+            },
+
+            )
+
+        return fragmentLayout
 
     }
 
@@ -42,21 +58,6 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        weatherDayViewModel.weatherLiveData.observe(
-            viewLifecycleOwner,
-            { weatherDaysInfo ->
-                val dateId: Int = arguments?.getSerializable("DATE") as Int
-                for(day in weatherDaysInfo) {
-                    if(day.dt == dateId)
-                    setDataToDetailView(day)
-
-                    (dialog as? BottomSheetDialog)?.behavior?.apply {
-                        setFitToContents(false)
-                    }
-                }
-            },
-
-        )
     }
 
     private fun setDataToDetailView(weatherDayInfo: DailyWeatherInfo) {
