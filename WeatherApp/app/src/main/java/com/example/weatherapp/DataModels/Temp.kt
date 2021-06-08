@@ -5,10 +5,10 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 data class Temp(
-    val day: Double,
-    val eve: Double,
+    var day: Double,
+    var eve: Double,
     var max: Double,
     var min: Double,
-    val morn: Double,
-    val night: Double
+    var morn: Double,
+    var night: Double
 )
