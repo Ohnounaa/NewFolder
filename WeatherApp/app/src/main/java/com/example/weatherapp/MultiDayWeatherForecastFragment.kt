@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import 	android.view.MotionEvent
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ActionBarContainer
 import androidx.appcompat.widget.AppCompatTextView
@@ -21,12 +23,13 @@ import com.squareup.picasso.Picasso
 import java.util.*
 
 class MultiDayWeatherForecastFragment: Fragment(),
-    AdapterView.OnItemSelectedListener {
+    AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
+    lateinit var fragmentLayout: View
+    var touched = false
     interface Callbacks{
         fun onDaySelected(weatherDt:Int?)
     }
-
 
     private var callbacks: Callbacks? = null
 
@@ -52,13 +55,13 @@ class MultiDayWeatherForecastFragment: Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         
-        val v = inflater.inflate(R.layout.multi_day_weather, container, false)
+         fragmentLayout = inflater.inflate(R.layout.multi_day_weather, container, false)
 
-        recyclerView = v.findViewById(R.id.daily_weather_data_collection)
+        recyclerView = fragmentLayout.findViewById(R.id.daily_weather_data_collection)
         recyclerView.layoutManager = LinearLayoutManager(context)
        // setUnitSelectorMenu()
 
-        return v
+        return fragmentLayout
     }
 
     override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
@@ -67,24 +70,33 @@ class MultiDayWeatherForecastFragment: Fragment(),
             viewLifecycleOwner,
             { weatherInfo ->
                 recyclerView.adapter = DailyWeatherRecyclerViewAdapter(weatherInfo, context, callbacks)
+                setUnitSelectorMenu()
             },
         )
     }
 
 
+    override fun onTouch(v: View, e: MotionEvent):Boolean {
+        touched = true
+        return false
+    }
+
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        if (recyclerView.adapter != null
-            && recyclerView.adapter is DailyWeatherRecyclerViewAdapter
-            && p1 != null
-            && (p1 is AppCompatTextView)
-            && (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition() != -1
+        if ((recyclerView.adapter != null
+                && recyclerView.adapter is DailyWeatherRecyclerViewAdapter
+                && p1 != null) && touched
         ) {
+            touched = false
             for (weather in (recyclerView.adapter as DailyWeatherRecyclerViewAdapter).weatherLiveData) {
-                if (p1.text == "Fahrenheit") {
+                if ((p1 as TextView).text == "Fahrenheit") {
+                    weather.temp.day = convertCelsiusToFahrenheit(weather.temp.day)
+                    weather.temp.night = convertCelsiusToFahrenheit(weather.temp.night)
                     weather.temp.max = convertCelsiusToFahrenheit(weather.temp.max)
                     weather.temp.min = convertCelsiusToFahrenheit(weather.temp.min)
                     weather.feels_like.day = convertCelsiusToFahrenheit(weather.feels_like.day)
                 } else if (p1.text == "Celsius") {
+                    weather.temp.day = convertFahrenheitToCelsius(weather.temp.day)
+                    weather.temp.night = convertFahrenheitToCelsius(weather.temp.night)
                     weather.temp.max = convertFahrenheitToCelsius(weather.temp.max)
                     weather.temp.min = convertFahrenheitToCelsius(weather.temp.min)
                     weather.feels_like.day = convertFahrenheitToCelsius(weather.feels_like.day)
@@ -97,18 +109,19 @@ class MultiDayWeatherForecastFragment: Fragment(),
         }
     }
 
-//    private fun setUnitSelectorMenu() {
-//        val unitsSelector: Spinner = findViewById(R.id.unit_selector)
-//        ArrayAdapter.createFromResource(
-//            this,
-//            R.array.temperature_units_array,
-//            android.R.layout.simple_spinner_item
-//        ).also { adapter ->
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-//            unitsSelector.adapter = adapter
-//        }
-//        unitsSelector.onItemSelectedListener = this
-//    }
+    private fun setUnitSelectorMenu() {
+        val unitsSelector: Spinner = fragmentLayout.findViewById(R.id.unit_selector)
+        ArrayAdapter.createFromResource(
+            getActivity()!!.getApplicationContext(),
+            R.array.temperature_units_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            unitsSelector.adapter = adapter
+        }
+        unitsSelector.setOnTouchListener(this)
+        unitsSelector.onItemSelectedListener = this
+    }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
