@@ -12,7 +12,6 @@ import com.example.weatherapp.DataModels.DailyWeatherInfo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,9 +52,6 @@ class WeatherDetailViewBottomSheetFragment(): BottomSheetDialogFragment() {
 
                     (dialog as? BottomSheetDialog)?.behavior?.apply {
                         setFitToContents(false)
-                       // setPeekHeight(500)
-                       // isScrollControlled = true
-                       // state = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }
             },
